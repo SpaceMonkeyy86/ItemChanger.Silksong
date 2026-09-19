@@ -1,6 +1,8 @@
 ﻿using GlobalSettings;
 using ItemChanger.Containers;
 using ItemChanger.Extensions;
+using ItemChanger.Items;
+using ItemChanger.Placements;
 using ItemChanger.Silksong.Components;
 using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Modules.YNBox;
@@ -194,16 +196,12 @@ public class ShinyContainer : Container
             };
         }
 
-        var placement = info.GiveInfo.Placement;
+        Placement placement = info.GiveInfo.Placement;
         if (placement.GetPlacementAndLocationTags().OfType<IHintBoxTag>().FirstOrDefault() is IHintBoxTag hintTag)
         {
             HintBox box = obj.AddComponent<HintBox>();
             box.Apply(hintTag);
         }
-
-        foreach (var icItem in placement.Items)
-            foreach (var tag in icItem.GetTags<ShinyModifierTag>())
-                tag.ModifyShinyContainer(placement, icItem, obj);
 
         if (info.CostInfo is not null)
         {
@@ -232,6 +230,14 @@ public class ShinyContainer : Container
             catch (Exception e)
             {
                 LogError($"Missing or ambiguous change scene tag on shiny {shiny.name} in {shiny.gameObject.scene.name}:\n{e}");
+            }
+        }
+
+        foreach (Item icItem in info.GiveInfo.Items)
+        {
+            foreach (ShinyModifierTag tag in icItem.GetTags<ShinyModifierTag>())
+            {
+                tag.ModifyShinyContainer(placement, icItem, obj);
             }
         }
     }
