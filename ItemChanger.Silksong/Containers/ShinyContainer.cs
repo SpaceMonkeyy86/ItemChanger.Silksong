@@ -1,6 +1,8 @@
 ﻿using GlobalSettings;
 using ItemChanger.Containers;
 using ItemChanger.Extensions;
+using ItemChanger.Items;
+using ItemChanger.Placements;
 using ItemChanger.Silksong.Components;
 using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Modules.YNBox;
@@ -75,7 +77,7 @@ public class ShinyContainer : Container
         /// </summary>
         FloatInPlace,
     }
-
+    
     public record ShinyControlInfo
     {
         public static ShinyControlInfo Default { get; } = new();
@@ -109,7 +111,7 @@ public class ShinyContainer : Container
 
     public override string Name => ContainerNames.Shiny;
 
-    public override uint SupportedCapabilities => ContainerCapabilities.PayCosts; // TODO
+    public override uint SupportedCapabilities => ContainerCapabilities.PayCosts | SilksongCapabilities.ChangeScene;
 
     public override bool SupportsInstantiate => true;
 
@@ -194,10 +196,11 @@ public class ShinyContainer : Container
             };
         }
 
-        if (info.GiveInfo.Placement.GetPlacementAndLocationTags().OfType<IHintBoxTag>().FirstOrDefault() is IHintBoxTag tag)
+        Placement placement = info.GiveInfo.Placement;
+        if (placement.GetPlacementAndLocationTags().OfType<IHintBoxTag>().FirstOrDefault() is IHintBoxTag hintTag)
         {
             HintBox box = obj.AddComponent<HintBox>();
-            box.Apply(tag);
+            box.Apply(hintTag);
         }
 
         if (info.CostInfo is not null)
@@ -205,6 +208,37 @@ public class ShinyContainer : Container
             CustomYNBoxInfo boxInfo = obj.AddComponent<CustomYNBoxInfo>();
             boxInfo.Cost = info.CostInfo.Cost;
             boxInfo.TextGetter = () => info.CostInfo.GetUIName();
+        }
+
+        if ((info.RequestedCapabilities & SilksongCapabilities.ChangeScene) != 0)
+        {
+            try
+            {
+                ChangeSceneTag changeSceneTag = info.GiveInfo.Placement.GetPlacementAndLocationTags().OfType<ChangeSceneTag>().Single();
+                item.ForceCanGetMore = true;
+                shiny.OnPickupEnd.AddListener(() => GameManager.instance.BeginSceneTransition(new()
+                {
+                    SceneName = changeSceneTag.TargetScene,
+                    EntryGateName = changeSceneTag.TargetGate,
+                    PreventCameraFadeOut = false,
+                    WaitForSceneTransitionCameraFade = true,
+                    Visualization = GameManager.SceneLoadVisualizations.Default,
+                    AlwaysUnloadUnusedAssets = true,
+                    IsFirstLevelForPlayer = false
+                }));
+            }
+            catch (Exception e)
+            {
+                LogError($"Missing or ambiguous change scene tag on shiny {shiny.name} in {shiny.gameObject.scene.name}:\n{e}");
+            }
+        }
+
+        foreach (Item icItem in info.GiveInfo.Items)
+        {
+            foreach (ShinyModifierTag tag in icItem.GetTags<ShinyModifierTag>())
+            {
+                tag.ModifyShinyContainer(placement, icItem, obj);
+            }
         }
     }
 

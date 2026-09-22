@@ -1,4 +1,5 @@
-﻿using ItemChanger.Locations;
+﻿using DataDrivenConstants.Marker;
+using ItemChanger.Locations;
 using ItemChanger.Serialization;
 using ItemChanger.Silksong.Extensions;
 using ItemChanger.Silksong.Serialization;
@@ -6,53 +7,14 @@ using TeamCherry.Localization;
 
 namespace ItemChanger.Silksong.RawData;
 
-internal static class ItemChangerLanguageStrings
+[JsonData("$.*~", "**/Languages/default.json")]
+internal static partial class ItemChangerLanguageStrings
 {
-    public static LanguageString FMT_PAY_ROSARIES => LanguageString.FromItemChanger(nameof(FMT_PAY_ROSARIES));
-    public static LanguageString FMT_PAY_SHELL_SHARDS => LanguageString.FromItemChanger(nameof(FMT_PAY_SHELL_SHARDS));
-    public static LanguageString FMT_FAST_TRAVEL_PATTERN => LanguageString.FromItemChanger(nameof(FMT_FAST_TRAVEL_PATTERN));
-    public static LanguageString FMT_MATERIUM_ENTRY_NAME => LanguageString.FromItemChanger(nameof(FMT_MATERIUM_ENTRY_NAME));
-    public static LanguageString FMT_JOURNAL_ENTRY_NAME => LanguageString.FromItemChanger(nameof(FMT_JOURNAL_ENTRY_NAME));
-    public static LanguageString FMT_LOCKED_CREST_PREVIEW => LanguageString.FromItemChanger(nameof(FMT_LOCKED_CREST_PREVIEW));
-    public static LanguageString FMT_CREST_SLOT_UNLOCK_ITEM => LanguageString.FromItemChanger(nameof(FMT_CREST_SLOT_UNLOCK_ITEM));
-
-    public static LanguageString INV_NAME_SKILL_HARPOON_LEFT => LanguageString.FromItemChanger(nameof(INV_NAME_SKILL_HARPOON_LEFT));
-    public static LanguageString INV_NAME_SKILL_HARPOON_RIGHT => LanguageString.FromItemChanger(nameof(INV_NAME_SKILL_HARPOON_RIGHT));
-    public static LanguageString INV_DESC_SKILL_HARPOON_LEFT => LanguageString.FromItemChanger(nameof(INV_DESC_SKILL_HARPOON_LEFT));
-    public static LanguageString INV_DESC_SKILL_HARPOON_RIGHT => LanguageString.FromItemChanger(nameof(INV_DESC_SKILL_HARPOON_RIGHT));
-    public static LanguageString INV_NAME_WALLJUMP_LEFT => LanguageString.FromItemChanger(nameof(INV_NAME_WALLJUMP_LEFT));
-    public static LanguageString INV_NAME_WALLJUMP_RIGHT => LanguageString.FromItemChanger(nameof(INV_NAME_WALLJUMP_RIGHT));
-    public static LanguageString INV_DESC_WALLJUMP_LEFT => LanguageString.FromItemChanger(nameof(INV_DESC_WALLJUMP_LEFT));
-    public static LanguageString INV_DESC_WALLJUMP_RIGHT => LanguageString.FromItemChanger(nameof(INV_DESC_WALLJUMP_RIGHT));
-    public static LanguageString INV_NAME_SKILL_SPRINT_LEFT => LanguageString.FromItemChanger(nameof(INV_NAME_SKILL_SPRINT_LEFT));
-    public static LanguageString INV_NAME_SKILL_SPRINT_RIGHT => LanguageString.FromItemChanger(nameof(INV_NAME_SKILL_SPRINT_RIGHT));
-    public static LanguageString INV_DESC_SKILL_SPRINT_LEFT => LanguageString.FromItemChanger(nameof(INV_DESC_SKILL_SPRINT_LEFT));
-    public static LanguageString INV_DESC_SKILL_SPRINT_RIGHT => LanguageString.FromItemChanger(nameof(INV_DESC_SKILL_SPRINT_RIGHT));
-    public static LanguageString INV_NAME_LEFTSLASH => LanguageString.FromItemChanger(nameof(INV_NAME_LEFTSLASH));
-    public static LanguageString INV_NAME_RIGHTSLASH => LanguageString.FromItemChanger(nameof(INV_NAME_RIGHTSLASH));
-    public static LanguageString INV_NAME_UPSLASH => LanguageString.FromItemChanger(nameof(INV_NAME_UPSLASH));
-    public static LanguageString INV_NAME_DOWNSLASH => LanguageString.FromItemChanger(nameof(INV_NAME_DOWNSLASH));
-    public static LanguageString INV_DESC_ANYSLASH => LanguageString.FromItemChanger(nameof(INV_DESC_ANYSLASH));
-    public static LanguageString INV_NAME_LORE => LanguageString.FromItemChanger(nameof(INV_NAME_LORE));
-
-    public static LanguageString INV_NAME_TAUNT => LanguageString.FromItemChanger(nameof(INV_NAME_TAUNT));
-    public static LanguageString INV_DESC_TAUNT => LanguageString.FromItemChanger(nameof(INV_DESC_TAUNT));
-    public static LanguageString GET_TAUNT_1 => LanguageString.FromItemChanger(nameof(GET_TAUNT_1));
-
-    public static LanguageString SLOT_TYPE_RED => LanguageString.FromItemChanger(nameof(SLOT_TYPE_RED));
-    public static LanguageString SLOT_TYPE_BLUE => LanguageString.FromItemChanger(nameof(SLOT_TYPE_BLUE));
-    public static LanguageString SLOT_TYPE_YELLOW => LanguageString.FromItemChanger(nameof(SLOT_TYPE_YELLOW));
-    public static LanguageString SLOT_TYPE_SKILL => LanguageString.FromItemChanger(nameof(SLOT_TYPE_SKILL));
-
-    public static LanguageString QUEST_BROLLY_GET_DESC_PREVIEW => LanguageString.FromItemChanger(nameof(QUEST_BROLLY_GET_DESC_PREVIEW));
-    public static LanguageString SEAMSTRESS_BROLLY_QUEST_OFFER_PREVIEW => LanguageString.FromItemChanger(nameof(SEAMSTRESS_BROLLY_QUEST_OFFER_PREVIEW));
-    public static LanguageString SEAMSTRESS_BROLLY_QUEST_REOFFER_PREVIEW => LanguageString.FromItemChanger(nameof(SEAMSTRESS_BROLLY_QUEST_REOFFER_PREVIEW));
-    public static LanguageString SNAILS_ACT3_DESCEND_HINT => LanguageString.FromItemChanger(nameof(SNAILS_ACT3_DESCEND_HINT));
-    public static LanguageString SHOP_DESC_ROSARIES => LanguageString.FromItemChanger(nameof(SHOP_DESC_ROSARIES));
+    private static LanguageString MakeLanguageString([DataInject(Prefix = "")] string name) => LanguageString.FromItemChanger(name);
 
     public static CompositeString CreatePayRosariesString(IValueProvider<int> rosaryCount)
     {
-        return CompositeString.Create(FMT_PAY_ROSARIES, new Dictionary<string, IValueProvider<object>>()
+        return CompositeString.Create(FMT_PAY_ROSARIES(), new Dictionary<string, IValueProvider<object>>()
         {
             { "ROSARY_COUNT", rosaryCount.Embox() },
             { "ROSARY_NAME", BaseLanguageStrings.Rosaries }
@@ -61,7 +23,7 @@ internal static class ItemChangerLanguageStrings
 
     public static CompositeString CreatePayShellShardsString(IValueProvider<int> shellShardsCount)
     {
-        return CompositeString.Create(FMT_PAY_SHELL_SHARDS, new Dictionary<string, IValueProvider<object>>()
+        return CompositeString.Create(FMT_PAY_SHELL_SHARDS(), new Dictionary<string, IValueProvider<object>>()
         {
             { "SHELL_SHARDS_COUNT", shellShardsCount.Embox() },
             { "SHELL_SHARDS_NAME", BaseLanguageStrings.Shell_Shards }

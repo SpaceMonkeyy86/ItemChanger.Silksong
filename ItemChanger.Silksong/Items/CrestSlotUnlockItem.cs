@@ -23,10 +23,10 @@ public class CrestSlotUnlockItem : Item
 
         LanguageString slotType = toolType switch
         {
-            ToolItemType.Red => ItemChangerLanguageStrings.SLOT_TYPE_RED,
-            ToolItemType.Blue => ItemChangerLanguageStrings.SLOT_TYPE_BLUE,
-            ToolItemType.Yellow => ItemChangerLanguageStrings.SLOT_TYPE_YELLOW,
-            ToolItemType.Skill => ItemChangerLanguageStrings.SLOT_TYPE_SKILL,
+            ToolItemType.Red => ItemChangerLanguageStrings.SLOT_TYPE_RED(),
+            ToolItemType.Blue => ItemChangerLanguageStrings.SLOT_TYPE_BLUE(),
+            ToolItemType.Yellow => ItemChangerLanguageStrings.SLOT_TYPE_YELLOW(),
+            ToolItemType.Skill => ItemChangerLanguageStrings.SLOT_TYPE_SKILL(),
             _ => throw new NotSupportedException()
         };
 
@@ -50,7 +50,7 @@ public class CrestSlotUnlockItem : Item
             UIDef = new MsgUIDef
             {
                 Name = CompositeString.Create(
-                    ItemChangerLanguageStrings.FMT_CREST_SLOT_UNLOCK_ITEM,
+                    ItemChangerLanguageStrings.FMT_CREST_SLOT_UNLOCK_ITEM(),
                     new Dictionary<string, IValueProvider<object>>
                     {
                         { "CREST_NAME", crestName },

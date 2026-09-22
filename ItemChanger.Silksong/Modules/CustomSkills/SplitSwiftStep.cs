@@ -39,8 +39,9 @@ public class SplitSwiftStep : CustomSkillModule
         get
         {
             if (hasDashBoth) return true;
+            if (!hasDashAny) return false;
             if (HeroController.SilentInstance is not HeroController hc || !hc) return false;
-            return hc.cState.facingRight ? hasDashRight : hasDashLeft;
+            return HeroWillActToRight(hc, LPlusR.Neutral) == hasDashRight;
         }
     }
 #pragma warning restore IDE1006, CA1822 // Naming Styles, Member can be made static
@@ -123,11 +124,11 @@ public class SplitSwiftStep : CustomSkillModule
     {
         if (hasDashLeft && !hasDashRight)
         {
-            return ItemChangerLanguageStrings.INV_NAME_SKILL_SPRINT_LEFT.Value;
+            return ItemChangerLanguageStrings.INV_NAME_SKILL_SPRINT_LEFT().Value;
         }
         if (hasDashRight && !hasDashLeft)
         {
-            return ItemChangerLanguageStrings.INV_NAME_SKILL_SPRINT_RIGHT.Value;
+            return ItemChangerLanguageStrings.INV_NAME_SKILL_SPRINT_RIGHT().Value;
         }
         return _;
     }
@@ -136,13 +137,20 @@ public class SplitSwiftStep : CustomSkillModule
     {
         if (hasDashLeft && !hasDashRight)
         {
-            return ItemChangerLanguageStrings.INV_DESC_SKILL_SPRINT_LEFT.Value;
+            return ItemChangerLanguageStrings.INV_DESC_SKILL_SPRINT_LEFT().Value;
         }
         if (hasDashRight && !hasDashLeft)
         {
-            return ItemChangerLanguageStrings.INV_DESC_SKILL_SPRINT_RIGHT.Value;
+            return ItemChangerLanguageStrings.INV_DESC_SKILL_SPRINT_RIGHT().Value;
         }
         return _;
+    }
+
+    protected override bool HeroWillActToRight(HeroController hc, LPlusR leftPlusRightBias)
+    {
+        if (hc.wallSlidingL && hc.inputHandler.inputActions.Left.IsPressed) return false;
+        if (hc.wallSlidingR && hc.inputHandler.inputActions.Right.IsPressed) return true;
+        return base.HeroWillActToRight(hc, leftPlusRightBias);
     }
 
 }

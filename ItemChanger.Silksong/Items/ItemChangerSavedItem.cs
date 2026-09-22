@@ -4,6 +4,7 @@ using ItemChanger.Silksong.Assets;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.UIDefs;
 using ItemChanger.Silksong.UIDefs.BigUIDefs;
+using ItemChanger.Tags;
 using UnityEngine.UI;
 
 namespace ItemChanger.Silksong.Items;
@@ -62,7 +63,7 @@ public class ItemChangerSavedItem : Item
         return new() { Name = name, Item = item, PlayerDataBoolName = playerDataBoolName, UIDef = uiDef };
     }
 
-    public static ItemChangerSavedItem CreateCrest(string name, string id, string nameKey, string? prefabKey = GameObjectKeys.CREST_GET_PROMPT)
+    public static ItemChangerSavedItem CreateCrest(string name, string id, string nameKey, AssetCache.GameObjectKey? prefabKey = null)
     {
         BaseGameSavedItem item = new() { Id = id, Type = BaseGameSavedItem.ItemType.ToolCrest };
         UIDef msgFallback = new MsgUIDef
@@ -72,17 +73,7 @@ public class ItemChangerSavedItem : Item
             SpriteScale = 1f / 3f,
         };
 
-        UIDef actualUIDef;
-
-        if (string.IsNullOrEmpty(prefabKey))
-        {
-            actualUIDef = msgFallback;
-        }
-        else
-        {
-            actualUIDef = CrestUIDef.Create(id, msgFallback, prefabKey);
-        }
-
+        UIDef actualUIDef = CrestUIDef.Create(id, msgFallback, prefabKey ?? GameObjectKeys.CREST_GET_PROMPT());
         return new()
         {
             Name = name,

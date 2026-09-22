@@ -1,12 +1,11 @@
 using Benchwarp.Data;
 using ItemChanger.Locations;
-using ItemChanger.Silksong.Locations;
 using ItemChanger.Silksong.Containers;
+using ItemChanger.Silksong.Locations;
 using ItemChanger.Silksong.Serialization;
 using ItemChanger.Silksong.Tags;
 using ItemChanger.Tags;
 using ItemChanger.Enums;
-using ItemChanger.Serialization;
 
 namespace ItemChanger.Silksong.RawData;
 
@@ -85,11 +84,40 @@ internal static partial class BaseLocationList
             Managed = false,
         },
     };
+    
+    public static Location Crest_of_Cursed_Witch => new DualLocation
+    {
+        SceneName = SceneNames.Room_Witch,
+        Name = LocationNames.Crest_of_Cursed_Witch,
+        Test = new QuestCompletionBool(Quests.Wood_Witch_Curse),
+        FalseLocation = new GreyrootCrestLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            FlingType = FlingType.DirectDeposit,
+        },
+        TrueLocation = new CoordinateLocation
+        {
+            SceneName = SceneNames.Room_Witch,
+            Name = LocationNames.Crest_of_Cursed_Witch,
+            X = 19.7f,
+            Y = 6.57f,
+            Managed = false,
+            FlingType = FlingType.DirectDeposit,
+            ForceDefaultContainer = true,
+        }.WithTag(new ChangeSceneTag { TargetScene = SceneNames.Shellwood_25b, TargetGate = PrimitiveGateNames.door_curseSequenceEnd }),
+    };
 
     public static Location Eva => new EvaLocation
     {
         SceneName = SceneNames.Weave_10,
         Name = LocationNames.Eva,
+    };
+    
+    public static Location Needle_Strike => new NeedleStrikeLocation
+    {
+        SceneName = SceneNames.Room_Pinstress,
+        Name = LocationNames.Needle_Strike,
     };
 
     public static Location Faydown_Cloak => new FayfornLocation
@@ -125,6 +153,14 @@ internal static partial class BaseLocationList
     {
         SceneName = SceneNames.Cradle_03_Destroyed,
         Name = LocationNames.Pale_Nails
+    };
+
+    public static Location Rune_Rage => new RuneRageLocation
+    {
+        SceneName = SceneNames.Slab_10b,
+        Name = LocationNames.Rune_Rage,
+        FlingType = FlingType.DirectDeposit,
+        SpawnPos = new(39, 10)
     };
 
     public static Location Silkspear => CreateWeaverCorpseLocation(

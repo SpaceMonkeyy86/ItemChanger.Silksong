@@ -31,7 +31,9 @@ public class SplitClawline : CustomSkillModule
     /// </summary>
     [JsonIgnore] public bool hasHarpoonDashBoth { get => (hasHarpoonDashLeft && hasHarpoonDashRight) || hasHarpoonDashInternal; }
     /// <summary>
-    /// Overrides base-game checks for clawline according to facing direction.
+    /// Overrides base-game checks for clawline according to facing and holding direction as well as wall-sliding state.
+    /// Wall sliding overrides holding direction which overrides facing direction.
+    /// FIXME: Also applies to story progression, such as TimePasses events, and other checks like Grindle selling Snitch Pick.
     /// </summary>
     [JsonIgnore]
     public bool hasHarpoonDash
@@ -39,8 +41,11 @@ public class SplitClawline : CustomSkillModule
         get
         {
             if (hasHarpoonDashBoth) return true;
+            if (!hasHarpoonDashAny) return false;
             if (HeroController.SilentInstance is not HeroController hc || !hc) return false;
-            return hc.cState.facingRight ? hasHarpoonDashRight : hasHarpoonDashLeft;
+            // if hasHarpoonDashAny is true, then !hasHarpoonDashRight implies hasHarpoonDashLeft
+            // so if both the values below are false, then Hornet will clawline to the left and must have left clawline
+            return HeroWillActToRight(hc, LPlusR.Right) == hasHarpoonDashRight;
         }
     }
 #pragma warning restore IDE1006, CA1822 // Naming Styles, Member can be made static
@@ -122,11 +127,11 @@ public class SplitClawline : CustomSkillModule
     {
         if (hasHarpoonDashLeft && !hasHarpoonDashRight)
         {
-            return ItemChangerLanguageStrings.INV_NAME_SKILL_HARPOON_LEFT.Value;
+            return ItemChangerLanguageStrings.INV_NAME_SKILL_HARPOON_LEFT().Value;
         }
         if (hasHarpoonDashRight && !hasHarpoonDashLeft)
         {
-            return ItemChangerLanguageStrings.INV_NAME_SKILL_HARPOON_RIGHT.Value;
+            return ItemChangerLanguageStrings.INV_NAME_SKILL_HARPOON_RIGHT().Value;
         }
         return _;
     }
@@ -135,11 +140,11 @@ public class SplitClawline : CustomSkillModule
     {
         if (hasHarpoonDashLeft && !hasHarpoonDashRight)
         {
-            return ItemChangerLanguageStrings.INV_DESC_SKILL_HARPOON_LEFT.Value;
+            return ItemChangerLanguageStrings.INV_DESC_SKILL_HARPOON_LEFT().Value;
         }
         if (hasHarpoonDashRight && !hasHarpoonDashLeft)
         {
-            return ItemChangerLanguageStrings.INV_DESC_SKILL_HARPOON_RIGHT.Value;
+            return ItemChangerLanguageStrings.INV_DESC_SKILL_HARPOON_RIGHT().Value;
         }
         return _;
     }
