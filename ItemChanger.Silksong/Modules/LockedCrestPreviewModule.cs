@@ -98,7 +98,7 @@ public class LockedCrestPreviewModule : Module
     {
         if (ShouldDisplayAsLocked(self))
         {
-            returnValue = string.Format(ItemChangerLanguageStrings.FMT_LOCKED_CREST_PREVIEW.Value, returnValue);
+            returnValue = string.Format(ItemChangerLanguageStrings.FMT_LOCKED_CREST_PREVIEW().Value, returnValue);
         }
     }
 
