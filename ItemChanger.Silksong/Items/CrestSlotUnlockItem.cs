@@ -16,9 +16,16 @@ public class CrestSlotUnlockItem : Item
 {
     public static CrestSlotUnlockItem Create(string name, string crestID, ToolItemType toolType)
     {
-        BoxedString crestName = new BoxedString
+        LanguageString crestName = crestID switch
         {
-            Value = ToolItemManager.GetCrestByName(crestID).DisplayName
+            "Hunter" => BaseLanguageStrings.Crest_of_Hunter_Name,
+            "Reaper" => BaseLanguageStrings.Crest_of_Reaper_Name,
+            "Wanderer" => BaseLanguageStrings.Crest_of_Wanderer_Name,
+            "Warrior" => BaseLanguageStrings.Crest_of_Beast_Name,
+            "Witch" => BaseLanguageStrings.Crest_of_Witch_Name,
+            "Toolmaster" => BaseLanguageStrings.Crest_of_Architect_Name,
+            "Spell" => BaseLanguageStrings.Crest_of_Shaman_Name,
+            _ => throw new NotSupportedException()
         };
 
         LanguageString slotType = toolType switch
