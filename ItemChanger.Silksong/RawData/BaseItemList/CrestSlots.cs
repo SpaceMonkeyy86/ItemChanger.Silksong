@@ -5,6 +5,15 @@ namespace ItemChanger.Silksong.RawData;
 
 internal static partial class BaseItemList
 {
+    /*
+     * Hunter - start: 1 red, 1 blue, 1 yellow, 1 silk. unlock: 1 red, 1 blue, 1 yellow, 0 silk.
+     * Reaper - start: 1 red, 1 blue, 1 yellow, 1 silk. unlock: 1 red, 1 blue, 1 yellow, 0 silk.
+     * Wanderer - start: 1 red, 0 blue, 2 yellow, 1 silk. unlock: 0 red, 2 blue, 1 yellow, 0 silk.
+     * Beast - start: 2 red, 0 blue, 0 yellow, 1 silk. unlock: 0 red, 0 blue, 2 yellow, 0 silk.
+     * Witch - start: 1 red, 1 blue, 0 yellow, 1 silk. unlock: 1 red, 2 blue, 0 yellow, 0 silk.
+     * Architect - start: 3 red, 0 blue, 0 yellow, 0 silk. unlock: 0 red, 2 blue, 2 yellow, 0 silk.
+     * Shaman - start: 0 red, 0 blue, 0 yellow, 3 silk. unlock: 0 red, 2 blue, 0 yellow, 0 silk.
+    */
     public static Item Crest_Slot__Hunter__Red_Tool => CrestSlotUnlockItem.Create(
         name: ItemNames.Crest_Slot__Hunter__Red_Tool,
         crestID: "Hunter", toolType: ToolItemType.Red);

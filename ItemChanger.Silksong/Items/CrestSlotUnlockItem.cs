@@ -78,7 +78,7 @@ public class CrestSlotUnlockItem : Item
 
     public override bool Redundant()
     {
-        return FindNextLockedSlotIndex() != null;
+        return FindNextLockedSlotIndex() == null;
     }
 
     public override void GiveImmediate(GiveInfo info)
